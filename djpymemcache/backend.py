@@ -2,6 +2,7 @@ try:
     import cPickle as pickle
 except ImportError:
     import pickle
+from threading import local
 
 from django.core.cache.backends.memcached import BaseMemcachedCache
 
@@ -24,6 +25,7 @@ class PyMemcacheCache(BaseMemcachedCache):
 
     def __init__(self, server, params):
         import pymemcache.client
+        self._local = local()
         if isinstance(server, basestring):
             server = server.split(';')
         server = server[0]  # Only support one server for now.
@@ -33,14 +35,17 @@ class PyMemcacheCache(BaseMemcachedCache):
 
     @property
     def _cache(self):
+        client = getattr(self._local, 'client', None)
+        if client:
+            return client
+        
         # pymemcached uses cache options as kwargs to the __init__ method.
-        if getattr(self, '_client', None) is None:
-            options = {
-                'serializer': serialize_pickle,
-                'deserializer': deserialize_pickle,
-            }
-            options.update(**self._options)
-            host, port = self._servers[0].split(':')
-            server = (host, int(port))
-            self._client = self._lib.Client(server, **options)
-        return self._client
+        options = {
+            'serializer': serialize_pickle,
+            'deserializer': deserialize_pickle,
+        }
+        options.update(**self._options)
+        host, port = self._servers[0].split(':')
+        server = (host, int(port))
+        self._local.client = self._lib.Client(server, **options)
+        return self._local.client
