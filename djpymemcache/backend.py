@@ -45,7 +45,8 @@ class PyMemcacheCache(BaseMemcachedCache):
             'serializer': serialize_pickle,
             'deserializer': deserialize_pickle,
         }
-        options.update(**self._options)
+        if self._options:
+            options.update(**self._options)
         host, port = self._servers[0].split(':')
         server = (host, int(port))
         self._local.client = self._lib.Client(server, **options)
