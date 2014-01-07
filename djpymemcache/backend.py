@@ -6,6 +6,8 @@ from threading import local
 
 from django.core.cache.backends.memcached import BaseMemcachedCache
 
+from . import client
+
 
 def serialize_pickle(key, value):
     if isinstance(value, basestring):
@@ -24,13 +26,12 @@ class PyMemcacheCache(BaseMemcachedCache):
     """An implementation of a cache binding using pymemcache."""
 
     def __init__(self, server, params):
-        import pymemcache.client
         self._local = local()
         if isinstance(server, basestring):
             server = server.split(';')
         server = server[0]  # Only support one server for now.
         super(PyMemcacheCache, self).__init__(server, params,
-                                              library=pymemcache.client,
+                                              library=client,
                                               value_not_found_exception=ValueError)
 
     @property
@@ -38,7 +39,7 @@ class PyMemcacheCache(BaseMemcachedCache):
         client = getattr(self._local, 'client', None)
         if client:
             return client
-        
+
         # pymemcached uses cache options as kwargs to the __init__ method.
         options = {
             'serializer': serialize_pickle,
