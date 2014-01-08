@@ -14,7 +14,6 @@ setup(
     license='Apache Software License 2.0',
     packages=find_packages(),
     include_package_data=True,
-    package_data={'': ['README.rst']},
     zip_safe=False,
     classifiers=[
         'Development Status :: 4 - Beta',
