@@ -22,8 +22,6 @@ Simply use it as any other Cache backend, e.g.::
             'LOCATION': [
                '127.0.0.1:11211',
             ],
-            'TIMEOUT': 60,
-            'KEY_PREFIX': 'kuma',
         },
     }
 
