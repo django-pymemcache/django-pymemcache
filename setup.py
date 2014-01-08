@@ -13,8 +13,8 @@ setup(
     url='https://github.com/jsocol/django-pymemcache',
     license='Apache Software License 2.0',
     packages=find_packages(),
+    install_requires=['pymemcache'],
     include_package_data=True,
-    package_data={'': ['README.rst']},
     zip_safe=False,
     classifiers=[
         'Development Status :: 4 - Beta',
