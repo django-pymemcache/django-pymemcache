@@ -4,7 +4,7 @@ from djpymemcache import __version__
 
 
 setup(
-    name='djpymemcache',
+    name='django-pymemcache',
     version=__version__,
     description="Django cache backend based on Pinterest's pymemcache client.",
     long_description=open('README.rst').read(),
