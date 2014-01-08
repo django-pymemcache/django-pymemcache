@@ -1,8 +1,8 @@
 django-pymemcache
 =================
 
-django-pymemcache is a Djagno cache backend that uses Pinterest's pymemcache_
-library as the backend.
+django-pymemcache is a Django cache backend that uses Pinterest's
+pymemcache_ library as the backend.
 
 Installation
 ------------
