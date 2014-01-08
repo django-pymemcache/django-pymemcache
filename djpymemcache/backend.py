@@ -27,9 +27,6 @@ class PyMemcacheCache(BaseMemcachedCache):
 
     def __init__(self, server, params):
         self._local = local()
-        if isinstance(server, basestring):
-            server = server.split(';')
-        server = server[0]  # Only support one server for now.
         super(PyMemcacheCache, self).__init__(server, params,
                                               library=client,
                                               value_not_found_exception=ValueError)
