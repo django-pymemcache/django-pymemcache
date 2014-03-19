@@ -10,7 +10,7 @@ from . import client
 
 
 def serialize_pickle(key, value):
-    if isinstance(value, basestring):
+    if isinstance(value, str):
         return value, 1
     return pickle.dumps(value), 2
 
