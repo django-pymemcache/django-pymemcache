@@ -1,6 +1,14 @@
+#!/usr/bin/env python
+
 from setuptools import setup, find_packages
 
 from djpymemcache import __version__
+
+
+requirements = [
+    'Django>=1.11',
+    'pymemcache',
+]
 
 
 setup(
@@ -10,10 +18,11 @@ setup(
     long_description=open('README.rst').read(),
     author='James Socol',
     author_email='me@jamessocol.com',
-    url='https://github.com/jsocol/django-pymemcache',
+    url='https://github.com/django-pymemcache/django-pymemcache',
     license='Apache Software License 2.0',
-    packages=find_packages(),
-    install_requires=['pymemcache'],
+    packages=find_packages(exclude=('tests')),
+    install_requires=requirements,
+    test_suite='runtests.runtests',
     include_package_data=True,
     zip_safe=False,
     classifiers=[
