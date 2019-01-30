@@ -1,22 +1,16 @@
 import time
 import unittest
+
+import django
+from django.core.cache import cache, caches
+from django.test import TestCase
+
+from .models import Poll, expensive_calculation
+
 try:
     from unittest import mock
 except ImportError:
     import mock
-
-import django
-from django.core.cache import (
-    cache,
-    caches,
-)
-from django.test import (
-    RequestFactory,
-    TestCase,
-    override_settings,
-)
-
-from .models import Poll, expensive_calculation
 
 
 # functions/classes for complex data type tests
@@ -29,10 +23,11 @@ class C:
         return 24
 
 
-class CacheTestCase(TestCase):
-    def setUp(self):
-        self.factory = RequestFactory()
+def fail_set_multi(mapping, *args, **kwargs):
+    return mapping.keys()
 
+
+class CacheTestCase(TestCase):
     def tearDown(self):
         cache.clear()
 
@@ -55,8 +50,14 @@ class CacheTestCase(TestCase):
         cache.set('b', 'b')
         cache.set('c', 'c')
         cache.set('d', 'd')
-        self.assertEqual(cache.get_many(['a', 'c', 'd']), {'a': 'a', 'c': 'c', 'd': 'd'})
-        self.assertEqual(cache.get_many(['a', 'b', 'e']), {'a': 'a', 'b': 'b'})
+        self.assertEqual(
+            cache.get_many(['a', 'c', 'd']),
+            {'a': 'a', 'c': 'c', 'd': 'd'},
+        )
+        self.assertEqual(
+            cache.get_many(['a', 'b', 'e']),
+            {'a': 'a', 'b': 'b'},
+        )
 
     def test_delete_many(self):
         cache.set('key1', 'spam')
@@ -81,11 +82,6 @@ class CacheTestCase(TestCase):
         cache.delete('key1')
         self.assertIsNone(cache.get('key1'))
         self.assertEqual(cache.get('key2'), 'eggs')
-
-    def test_has_key(self):
-        cache.set('spam', 'egg')
-        self.assertTrue(cache.has_key('spam'))
-        self.assertFalse(cache.has_key('egg'))
 
     def test_in(self):
         cache.set('spam', 'egg')
@@ -132,7 +128,7 @@ class CacheTestCase(TestCase):
     def test_cache_read_for_model_instance(self):
         expensive_calculation.num_runs = 0
         Poll.objects.all().delete()
-        my_poll = Poll.objects.create(question="Well?")
+        my_poll = Poll.objects.create(question='Well?')
         self.assertEqual(Poll.objects.count(), 1)
         pub_date = my_poll.pub_date
         cache.set('question', my_poll)
@@ -148,11 +144,11 @@ class CacheTestCase(TestCase):
         cache.set('expire3', 'very quickly', 1)
 
         time.sleep(2)
-        self.assertIsNone(cache.get("expire1"))
+        self.assertIsNone(cache.get('expire1'))
 
-        cache.add("expire2", "newvalue")
-        self.assertEqual(cache.get("expire2"), "newvalue")
-        self.assertFalse(cache.has_key("expire3"))
+        cache.add('expire2', 'newvalue')
+        self.assertEqual(cache.get('expire2'), 'newvalue')
+        self.assertNotIn('expire3', cache)
 
     def test_cache_versioning(self):
         # set, using default version = 1
@@ -206,21 +202,21 @@ class CacheTestCase(TestCase):
         with self.assertRaises(Exception):
             cache.set('a' * 251, 'value')
 
-    @unittest.skipIf(django.VERSION < (2, 0), "Returning failing list >=2.0")
+    @unittest.skipIf(django.VERSION < (2, 0), 'Returning failing list >=2.0')
     def test_set_many_returns_failing_keys(self):
         # https://docs.djangoproject.com/en/2.1/releases/2.0/#cache
-        def fail_set_multi(mapping, *args, **kwargs):
-            return mapping.keys()
-
-        with mock.patch('djpymemcache.client.Client.set_multi', side_effect=fail_set_multi):
+        with mock.patch(
+            'djpymemcache.client.Client.set_multi',
+            side_effect=fail_set_multi,
+        ):
             failing_keys = cache.set_many({'key': 'value'})
             self.assertEqual(failing_keys, ['key'])
 
-    @unittest.skipIf(django.VERSION >= (2, 0), "Returning NOne <2.0")
+    @unittest.skipIf(django.VERSION >= (2, 0), 'Returning NOne <2.0')
     def test_set_many_returns_none(self):
-        def fail_set_multi(mapping, *args, **kwargs):
-            return mapping.keys()
-
-        with mock.patch('djpymemcache.client.Client.set_multi', side_effect=fail_set_multi):
+        with mock.patch(
+            'djpymemcache.client.Client.set_multi',
+            side_effect=fail_set_multi,
+        ):
             failing_keys = cache.set_many({'key': 'value'})
             self.assertEqual(failing_keys, None)

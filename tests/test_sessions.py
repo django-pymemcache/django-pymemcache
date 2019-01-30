@@ -1,16 +1,5 @@
-import base64
-import string
-from datetime import timedelta
-
-from django.conf import settings
 from django.contrib.sessions.backends.cache import SessionStore
-from django.test import (
-    TestCase,
-    ignore_warnings,
-    override_settings,
-)
-from django.test.utils import patch_logger
-from django.utils import timezone
+from django.test import TestCase
 
 
 class SessionTestCase(TestCase):

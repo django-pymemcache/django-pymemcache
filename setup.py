@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 from djpymemcache import __version__
-
 
 requirements = [
     'Django>=1.11',

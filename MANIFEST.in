@@ -1,3 +1,16 @@
-include README.rst
+graft djpymemcache
+graft docs
+
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude *.cfg
+
 include LICENSE
-include MANIFEST.in
+include README.rst
+include runtests.py
+include setup.py
+
+exclude tox.ini
+
+prune docs/_build
+prune tests
