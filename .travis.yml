@@ -1,0 +1,48 @@
+dist: xenial
+sudo: false
+
+services:
+- memcached
+
+language: python
+python:
+- 2.7
+- 3.4
+- 3.5
+- 3.6
+- 3.7
+
+cache: pip
+
+env:
+  matrix:
+  - DJANGO=1.11
+  - DJANGO=2.0
+  - DJANGO=2.1
+  - DJANGO=master
+
+matrix:
+  fast_finish: true
+  include:
+  - env: TOXENV=flake8
+    python: 3.7
+  - env: TOXENV=isort
+    python: 3.7
+  - env: TOXENV=readme
+    python: 3.7
+  - env: TOXENV=check-manifest
+    python: 3.7
+  exclude:
+  - python: 2.7
+    env: DJANGO=2.0
+  - python: 2.7
+    env: DJANGO=2.1
+  - python: 3.4
+    env: DJANGO=2.1
+  allow_failures:
+  - env: DJANGO=master
+
+install:
+- travis_retry pip install -U pip setuptools tox-travis wheel
+script:
+- tox
