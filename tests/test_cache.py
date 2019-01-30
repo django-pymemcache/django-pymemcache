@@ -13,8 +13,6 @@ except ImportError:
     import mock
 
 
-
-
 # functions/classes for complex data type tests
 def f():
     return 42
