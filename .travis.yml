@@ -41,9 +41,6 @@ matrix:
     env: DJANGO=2.1
   allow_failures:
   - env: DJANGO=master
-  - env: TOXENV=flake8
-  - env: TOXENV=isort
-  - env: TOXENV=check-manifest
 
 install:
 - travis_retry pip install -U pip setuptools tox-travis wheel
