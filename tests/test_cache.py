@@ -1,10 +1,11 @@
 import time
-
+import unittest
 try:
     from unittest import mock
 except ImportError:
     import mock
 
+import django
 from django.core.cache import (
     cache,
     caches,
@@ -205,10 +206,21 @@ class CacheTestCase(TestCase):
         with self.assertRaises(Exception):
             cache.set('a' * 251, 'value')
 
+    @unittest.skipIf(django.VERSION < (2, 0), "Returning failing list >=2.0")
     def test_set_many_returns_failing_keys(self):
+        # https://docs.djangoproject.com/en/2.1/releases/2.0/#cache
         def fail_set_multi(mapping, *args, **kwargs):
             return mapping.keys()
 
         with mock.patch('djpymemcache.client.Client.set_multi', side_effect=fail_set_multi):
             failing_keys = cache.set_many({'key': 'value'})
             self.assertEqual(failing_keys, ['key'])
+
+    @unittest.skipIf(django.VERSION >= (2, 0), "Returning NOne <2.0")
+    def test_set_many_returns_none(self):
+        def fail_set_multi(mapping, *args, **kwargs):
+            return mapping.keys()
+
+        with mock.patch('djpymemcache.client.Client.set_multi', side_effect=fail_set_multi):
+            failing_keys = cache.set_many({'key': 'value'})
+            self.assertEqual(failing_keys, None)
