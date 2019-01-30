@@ -1,18 +1,18 @@
 import time
 import unittest
+
+import django
+from django.core.cache import cache, caches
+from django.test import TestCase
+
+from .models import Poll, expensive_calculation
+
 try:
     from unittest import mock
 except ImportError:
     import mock
 
-import django
-from django.core.cache import (
-    cache,
-    caches,
-)
-from django.test import TestCase
 
-from .models import Poll, expensive_calculation
 
 
 # functions/classes for complex data type tests

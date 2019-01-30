@@ -1,7 +1,7 @@
 from pymemcache.client.hash import HashClient
 from pymemcache.serde import (
-    python_memcache_serializer,
     python_memcache_deserializer,
+    python_memcache_serializer,
 )
 
 
