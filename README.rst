@@ -25,14 +25,9 @@ Simply use it as any other Cache backend, e.g.::
         },
     }
 
-.. note::
-
-    The backend currently only supports connecting to one server.
-
 Issues
 ------
 
-    https://github.com/jsocol/django-pymemcache/issues
-
+    https://github.com/django-pymemcache/django-pymemcache/issues
 
 .. _pymemcache: https://github.com/pinterest/pymemcache
