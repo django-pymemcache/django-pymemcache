@@ -46,3 +46,15 @@ install:
 - travis_retry pip install -U pip setuptools tox-travis wheel
 script:
 - tox
+
+deploy:
+  provider: pypi
+  user: Surgo
+  password:
+    secure: xTH+KGdqjWwUgp1ElrEsOtt855k6VwR1UHedMj90ge3jNmYD49o02yPbRTgyOkSJ8ONs79rYbGqPzcm3RYVYHHAWF0pv8pAc4wl9wYZe5AL0VqhJEz3bdpz4CXViwKyF7oABV2N77ALEKJfHbuBLe5kC74NfMuDnVASP+44J1s8=
+  distributions: sdist bdist_wheel
+  on:
+    tags: true
+    repo: django-pymemcache/django-pymemcache
+    python: 3.7
+    condition: $DJANGO = 2.1

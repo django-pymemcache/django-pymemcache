@@ -1,6 +1,15 @@
 django-pymemcache
 =================
 
+.. image:: https://travis-ci.org/django-pymemcache/django-pymemcache.svg?branch=master
+   :target: https://travis-ci.org/django-pymemcache/django-pymemcache
+.. image:: https://codecov.io/gh/django-pymemcache/django-pymemcache/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/django-pymemcache/django-pymemcache
+.. image:: https://img.shields.io/pypi/v/django-pymemcache.svg?style=flat
+   :target: https://pypi.org/project/django-pymemcache/
+.. image:: https://img.shields.io/pypi/djversions/django-pymemcache.svg?style=flat
+.. image:: https://img.shields.io/pypi/pyversions/django-pymemcache.svg?style=flat
+
 django-pymemcache is a Django cache backend that uses Pinterest's
 pymemcache_ library as the backend.
 
@@ -25,14 +34,9 @@ Simply use it as any other Cache backend, e.g.::
         },
     }
 
-.. note::
-
-    The backend currently only supports connecting to one server.
-
 Issues
 ------
 
-    https://github.com/jsocol/django-pymemcache/issues
-
+    https://github.com/django-pymemcache/django-pymemcache/issues
 
 .. _pymemcache: https://github.com/pinterest/pymemcache
