@@ -1,25 +1,7 @@
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
 from threading import local
 
+import pymemcache
 from django.core.cache.backends.memcached import BaseMemcachedCache
-
-from . import client
-
-
-def serialize_pickle(key, value):
-    if isinstance(value, str):
-        return value, 1
-    return pickle.dumps(value), 2
-
-def deserialize_pickle(key, value, flags):
-    if flags == 1:
-        return value
-    if flags == 2:
-        return pickle.loads(value)
-    raise Exception('Unknown flags for value: {1}'.format(flags))
 
 
 class PyMemcacheCache(BaseMemcachedCache):
@@ -28,8 +10,8 @@ class PyMemcacheCache(BaseMemcachedCache):
     def __init__(self, server, params):
         self._local = local()
         super(PyMemcacheCache, self).__init__(server, params,
-                                              library=client,
-                                              value_not_found_exception=ValueError)
+                                              library=pymemcache,
+                                              value_not_found_exception=KeyError)
 
     @property
     def _cache(self):
@@ -39,8 +21,8 @@ class PyMemcacheCache(BaseMemcachedCache):
 
         # pymemcached uses cache options as kwargs to the __init__ method.
         options = {
-            'serializer': serialize_pickle,
-            'deserializer': deserialize_pickle,
+            'serializer': pymemcache.serde.python_memcache_serializer,
+            'deserializer': pymemcache.serde.python_memcache_deserializer,
         }
         if self._options:
             options.update(**self._options)
