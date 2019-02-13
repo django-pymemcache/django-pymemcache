@@ -23,7 +23,9 @@ Installation
 Usage
 -----
 
-Simply use it as any other Cache backend, e.g.::
+Simply use it as any other Cache backend, e.g.
+
+.. code-block:: python
 
     CACHES = {
         'default': {
