@@ -1,7 +1,7 @@
 from pymemcache.client.hash import HashClient
 from pymemcache.serde import (
-    python_memcache_deserializer,
-    python_memcache_serializer,
+    python_memcache_deserializer as default_deserializer,
+    python_memcache_serializer as default_serializer,
 )
 
 
@@ -30,10 +30,16 @@ class Client(HashClient):
     """
 
     def __init__(self, servers, *args, **kwargs):
-        kwargs['serializer'] = python_memcache_serializer
-        kwargs['deserializer'] = python_memcache_deserializer
-        return super(Client, self).__init__(
-            _split_host_and_port(servers), *args, **kwargs)
+        kwargs.update(
+            serializer=kwargs.get('serializer', default_serializer),
+            deserializer=kwargs.get('deserializer', default_deserializer)
+        )
+
+        super(Client, self).__init__(
+            _split_host_and_port(servers),
+            *args,
+            **kwargs
+        )
 
     def disconnect_all(self):
         for client in self.clients.values():
