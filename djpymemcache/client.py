@@ -1,7 +1,7 @@
 from pymemcache.client.hash import HashClient
 from pymemcache.serde import (
-    python_memcache_deserializer as default_deserializer,
-    python_memcache_serializer as default_serializer,
+    python_memcache_deserializer,
+    python_memcache_serializer,
 )
 
 
@@ -31,8 +31,9 @@ class Client(HashClient):
 
     def __init__(self, servers, *args, **kwargs):
         kwargs.update(
-            serializer=kwargs.get('serializer', default_serializer),
-            deserializer=kwargs.get('deserializer', default_deserializer)
+            serializer=kwargs.get('serializer', python_memcache_serializer),
+            deserializer=kwargs.get('deserializer',
+                                    python_memcache_deserializer)
         )
 
         super(Client, self).__init__(
