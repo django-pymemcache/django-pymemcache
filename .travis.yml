@@ -46,5 +46,5 @@ deploy:
   on:
     tags: true
     repo: django-pymemcache/django-pymemcache
-    python: 3.7
-    condition: $DJANGO = 2.1
+    python: 3.8
+    condition: $DJANGO=3.0
