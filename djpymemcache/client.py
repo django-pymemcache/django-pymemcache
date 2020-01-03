@@ -30,11 +30,8 @@ class Client(HashClient):
     """
 
     def __init__(self, servers, *args, **kwargs):
-        kwargs.update(
-            serializer=kwargs.get('serializer', python_memcache_serializer),
-            deserializer=kwargs.get('deserializer',
-                                    python_memcache_deserializer)
-        )
+        kwargs.setdefault('serializer', python_memcache_serializer)
+        kwargs.setdefault('deserializer', python_memcache_deserializer)
 
         super(Client, self).__init__(
             _split_host_and_port(servers),
