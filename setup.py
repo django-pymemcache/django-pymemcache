@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 from djpymemcache import __version__
 
 requirements = [
-    'Django>=1.11',
+    'Django>=2.2',
     'pymemcache',
 ]
 
@@ -28,7 +28,6 @@ setup(
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
-        'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.2',
         'Framework :: Django :: 3.0',
         'License :: OSI Approved :: Apache Software License',
