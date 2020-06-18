@@ -33,6 +33,10 @@ Simply use it as any other `Cache backend <https://docs.djangoproject.com/en/sta
             'LOCATION': [
                '127.0.0.1:11211',
             ],
+            'OPTIONS': {
+                'serializer': <your_serializer>,
+                'deserializer': <your_deserializer>,
+            },
         },
     }
 
