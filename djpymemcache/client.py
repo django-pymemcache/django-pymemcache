@@ -30,10 +30,14 @@ class Client(HashClient):
     """
 
     def __init__(self, servers, *args, **kwargs):
-        kwargs['serializer'] = python_memcache_serializer
-        kwargs['deserializer'] = python_memcache_deserializer
-        return super(Client, self).__init__(
-            _split_host_and_port(servers), *args, **kwargs)
+        kwargs.setdefault('serializer', python_memcache_serializer)
+        kwargs.setdefault('deserializer', python_memcache_deserializer)
+
+        super(Client, self).__init__(
+            _split_host_and_port(servers),
+            *args,
+            **kwargs
+        )
 
     def disconnect_all(self):
         for client in self.clients.values():
